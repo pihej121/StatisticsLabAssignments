@@ -1,0 +1,128 @@
+---
+title: "Lab2_PatrickIhejirika"
+author: "Patrick Ihejirika"
+date: "9/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Use R to demonstrate that the mean minimizes the sum of the squared deviations from the mean. Accomplish the following steps:
+```{r}
+# Produce a sample of at least 10 or more different numbers
+##Use your simulation to test a range of numbers smaller and larger than the mean to show that the mean minimizes the sum of the squared deviations from the mean.
+Prblm1A = sample(1:10, 20, replace = TRUE )
+Prblm1A
+# Produce a simulation following the example from the concepts section
+min(Prblm1A) 
+max(Prblm1A)
+numbers_to_test <- (min(Prblm1A):mean(Prblm1A):max(Prblm1A))
+sum_squared_deviations <-c() 
+for(i in numbers_to_test) {
+  sum_squared_deviations[i] <- sum((Prblm1A-i)^2)
+}
+sum_squared_deviations
+
+# Plot your results.
+plot(sum_squared_deviations)
+# Write a custom R function for any one of the following descriptive statistics: median, mode, standard deviation, variance. Demonstrate that it produces the same value as the base R function given some set of numbers.
+
+##Mean
+Average_PrblmA <- c()
+for (i  in Prblm1A) {
+  Average_PrblmA <- sum(Prblm1A)/length(Prblm1A)
+}
+Average_PrblmA
+##Mode
+for (i  in Prblm1A) {
+  Mode_PrblmA[i] <- max(frequency(Prblm1A))
+}
+Mode_PrblmA
+##Standard Deviation
+for  (i in Prblm1A){
+  std_PrblmA <- sqrt((sum(Prblm1A[i]-mean(Prblm1A))^2)/length(Prblm1A))
+}
+std_PrblmA
+
+```
+
+
+#Imagine the same instructor taught a morning, afternoon, and evening section of the same course. And, the average scores for each section on a midterm were 85% for the morning, 90% for the afternoon, and 93% for the evening sections. Create a data.frame representing these means for each section. Then, use ggplot2 to plot the means as bar graph. (hint you will need one vector for the class sections, and one vector for the means. Then you can combine them into a data.frame before plotting them)
+```{r}
+Prblm2 = data.frame(
+  Section = c("Morning", "Afternoon", "Evening"),
+  Score_Percentage = c(85, 90, 93)
+)
+
+ggplot(Prblm2,                          
+       aes(x = Section,
+           y = Score_Percentage)) +
+  geom_bar(stat = "identity",
+           position = "dodge")
+```
+
+# Imagine there were two instructors, and they each taught different sections in the morning, afternoon and evening. The midterm averages for instructor 1 were 75%, 78%, and 80% in the morning, afternoon, and evening. The midterm averages for instructor 2 were 88%, 76%, and 63% for the morning, afternoon, and evening. Create a data.frame representing the means, the time of day, and the instructors (three columns). Then plot data.frame using ggplot2 as a bar graph.
+```{r}
+Prblm3 = data.frame(
+  Instructor = c(1,1,1,2,2,2),
+  Section = c("Morning", "Afternoon", "Evening","Morning", "Afternoon", "Evening"),
+  Score_Percentage = c(75,78,80,88,76,63)
+)
+
+
+ggplot(Prblm3, aes(group=Instructor, color = Instructor, y=Score_Percentage, x=Section)) + 
+    geom_bar(position="dodge", stat="identity")
+```
+
+# Import the WHR2018.csv data file, containing measure from the World Happiness report from 2018. For the years 2010 to 2015, what was the mean “healthy life expectancy at birth” for each year (find the mean for each year across countries). Show your results in a table and in a graph using ggplot.
+```{r}
+WHR2018 <- read.csv("~/Downloads/WHR2018.csv")
+x <- c("country", "year", "Healthy.life.expectancy.at.birth")
+WHR2018 <- WHR2018[x]
+
+WHR2010 <- subset(WHR2018, year == 2010)
+ mean2010 = mean(na.omit(WHR2010$Healthy.life.expectancy.at.birth))
+WHR2011 <- subset(WHR2018, year == 2011) 
+ mean2011 = mean(na.omit(WHR2011$Healthy.life.expectancy.at.birth))
+WHR2012 <- subset(WHR2018, year == 2012) 
+ mean2012 = mean(na.omit(WHR2012$Healthy.life.expectancy.at.birth))
+WHR2013 <- subset(WHR2018, year == 2013) 
+ mean2013 = mean(na.omit(WHR2013$Healthy.life.expectancy.at.birth))
+WHR2014 <- subset(WHR2018, year == 2014) 
+ mean2014 = mean(na.omit(WHR2014$Healthy.life.expectancy.at.birth))
+WHR2015 <- subset(WHR2018, year == 2015) 
+ mean2015 = mean(na.omit(WHR2015$Healthy.life.expectancy.at.birth))
+
+ Prblm4 = data.frame(
+  Year = c(2010:2015),
+  Average = c(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015)
+)
+ 
+
+ggplot(Prblm4, aes(y=Average, x=Year)) + geom_bar(position="dodge", stat="identity", fill="skyblue")
+
+```
+# Repeat the above, except in addition to calculating the mean for each year, also calculate the standard deviation for “healthy life expectancy at birth” for each year. Then, add error bars to your graph using the +1 and -1 standard deviations from the means for each year.
+
+```{r}
+  std2010 = sd(na.omit(WHR2010$Healthy.life.expectancy.at.birth))
+  std2011 = sd(na.omit(WHR2011$Healthy.life.expectancy.at.birth))
+  std2012 = sd(na.omit(WHR2012$Healthy.life.expectancy.at.birth))
+  std2013 = sd(na.omit(WHR2013$Healthy.life.expectancy.at.birth))
+  std2014 = sd(na.omit(WHR2014$Healthy.life.expectancy.at.birth))
+  std2015 = sd(na.omit(WHR2015$Healthy.life.expectancy.at.birth))
+  
+   Prblm5 = data.frame(
+  Year = c(2010:2015),
+  Average = c(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015),
+  sd = c(std2010,  std2011,  std2012,  std2013,  std2014,  std2015)
+)
+   
+   
+ggplot(Prblm5) +
+    geom_bar(aes(x=Year, y=Average), stat="identity", fill="skyblue", alpha=0.7) +
+    geom_errorbar(aes(x=Year, ymin=Average-sd, ymax=Average+sd), width=0.4, colour="orange", alpha=0.9, size=1.3)   
+   
+```
